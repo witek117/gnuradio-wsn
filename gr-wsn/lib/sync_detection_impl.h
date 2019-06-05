@@ -28,8 +28,9 @@ namespace gr {
 
     class sync_detection_impl : public sync_detection
     {
-     private:
-      // Nothing to declare in this block.
+      private:
+      static uint16_t sync;
+      static uint16_t last_16_bits;
 
      public:
       sync_detection_impl();

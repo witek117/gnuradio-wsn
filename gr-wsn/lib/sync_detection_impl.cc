@@ -27,6 +27,9 @@
 
 namespace gr {
   namespace wsn {
+    
+    uint16_t sync_detection_impl::sync = 0b1101111010101101;
+    uint16_t sync_detection_impl::last_16_bits = 0;
 
     sync_detection::sptr
     sync_detection::make()
@@ -40,7 +43,7 @@ namespace gr {
      */
     sync_detection_impl::sync_detection_impl()
       : gr::sync_block("sync_detection",
-              gr::io_signature::make(<+MIN_IN+>, <+MAX_IN+>, sizeof(<+ITYPE+>)),
+              gr::io_signature::make(1, 1, sizeof(uint8_t)),
               gr::io_signature::make(0, 0, 0))
     {}
 
@@ -56,7 +59,17 @@ namespace gr {
         gr_vector_const_void_star &input_items,
         gr_vector_void_star &output_items)
     {
-      const <+ITYPE+> *in = (const <+ITYPE+> *) input_items[0];
+      const uint8_t *in = (const uint8_t *) input_items[0];
+
+      for (int i =0; i < noutput_items; i ++) {
+        last_16_bits << 1;
+        if (in[i] > 0) {
+          last_16_bits |= 1;
+        }
+        if (last_16_bits == sync) {
+          printf("mam!");
+        }
+      }
 
       // Do <+signal processing+>
 
