@@ -22,6 +22,7 @@
 from gnuradio import gr, gr_unittest
 from gnuradio import blocks
 import wsn_swig as wsn
+from numpy import array
 
 class qa_sync_detection (gr_unittest.TestCase):
 
@@ -32,9 +33,18 @@ class qa_sync_detection (gr_unittest.TestCase):
         self.tb = None
 
     def test_001_t (self):
+        print "dfg"
+        input_data = array([0,4,6,2,0,4,5,1,3,0,6,7,0,8,0,9,0,7,7,8,8,0,9,9,4,3,0,7,3,0,6,6])
+        src = blocks.vector_source_b(input_data)
+        demod = wsn.sync_detection()
+
+        self.tb.connect(src,demod)
         # set up fg
         self.tb.run ()
         # check data
+        # elf.assertTupleEqual(expected_result, result_data)
+        
+        self.assertEqual(1, 1)
 
 
 if __name__ == '__main__':

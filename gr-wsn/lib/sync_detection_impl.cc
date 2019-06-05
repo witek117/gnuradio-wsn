@@ -21,6 +21,7 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+#include <iostream>
 
 #include <gnuradio/io_signature.h>
 #include "sync_detection_impl.h"
@@ -62,16 +63,16 @@ namespace gr {
       const uint8_t *in = (const uint8_t *) input_items[0];
 
       for (int i =0; i < noutput_items; i ++) {
-        last_16_bits << 1;
+        
+        last_16_bits >>= 1;
         if (in[i] > 0) {
-          last_16_bits |= 1;
+          last_16_bits |= (1 << 15);
         }
+
         if (last_16_bits == sync) {
           printf("mam!");
         }
       }
-
-      // Do <+signal processing+>
 
       // Tell runtime system how many output items we produced.
       return noutput_items;
